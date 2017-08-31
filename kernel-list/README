@@ -1,0 +1,2 @@
+Kernel linked list file list.h is modified for use in user space.
+Sample program to add and print linked list members using kernel linked list.
