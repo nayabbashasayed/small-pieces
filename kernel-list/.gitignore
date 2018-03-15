@@ -1,0 +1,5 @@
+*.o
+*.out
+*.diff
+*.patch
+*.swp
