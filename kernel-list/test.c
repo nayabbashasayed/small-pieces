@@ -16,7 +16,7 @@ Other structure must have struct list_head list as a member.
 This is independent head for any linked list */
 LIST_HEAD(head);
 
-void add(void) {
+void add_tail(void) {
 	struct mystruct *mem;
 	mem = malloc(sizeof(struct mystruct));
 	int random_x;
@@ -26,9 +26,22 @@ void add(void) {
 	list_add_tail(&(mem->mylist), &head);
 }
 
+void add_head(void) {
+	struct mystruct *mem;
+	mem = malloc(sizeof(struct mystruct));
+	int random_x;
+	random_x = rand() % 100;
+	printf("Rand %d\n", random_x);
+	mem->a = random_x;
+	list_add(&(mem->mylist), &head);
+}
+
 void print1(void) {
 	struct list_head *pos = NULL;
 	struct mystruct *dataptr = NULL;
+	if (list_empty(&head)) {
+		printf("List empty\n");
+	}
 	list_for_each(pos, &head) {
 		dataptr = list_entry(pos, struct mystruct, mylist);
 		printf("Integer = %d\n", dataptr->a);
@@ -36,7 +49,7 @@ void print1(void) {
 }
 
 void print2(void) {
-	struct list_head *pos = NULL;
+	//struct list_head *pos = NULL;
 	struct mystruct *dataptr = NULL;
 	list_for_each_entry(dataptr, &head, mylist) {
 		printf("Integer = %d\n", dataptr->a);
@@ -50,13 +63,42 @@ void del_first_entry(void)
 	__list_del_entry(del);
 }
 
+void del_last_entry(void)
+{
+	struct mystruct *dataptr = NULL;
+	struct mystruct *last = NULL;
+	struct list_head *last_ptr = NULL;
+	list_for_each_entry(dataptr, &head, mylist) {
+		last = dataptr;
+	}
+	last_ptr = &last->mylist;
+	__list_del_entry(last_ptr);
+}
+
+void avg_first_n_num(int n)
+{
+	struct mystruct *dataptr = NULL;
+	int iter = 0, avg = 0;
+	list_for_each_entry(dataptr, &head, mylist) {
+		if (iter == n) {
+			break;
+		}
+		avg += dataptr->a;
+		printf("Integer = %d\n", dataptr->a);
+		iter ++;
+	}
+	printf("Total avg %d\n", avg);
+}
+
 int main(void)
 {
 	srand ( time(NULL) );
+	del_first_entry();
+	print1();
 	printf("Adding three random numbers\n");
-	add();
-	add();
-	add();
+	add_tail();
+	add_tail();
+	add_tail();
 	printf("Printing using two different methods\n");
 	print1();
 	print2();
@@ -64,4 +106,15 @@ int main(void)
 	printf("Deleted first entry\n");
 	del_first_entry();
 	print2();
+	printf("Added entry to tail\n");
+	add_tail();
+	print2();
+	printf("Adding entry to head\n");
+	add_head();
+	print2();
+	printf("Deleted last entry\n");
+	del_last_entry();
+	print2();
+	printf("Averaging first n numbers\n");
+	avg_first_n_num(2);
 }
