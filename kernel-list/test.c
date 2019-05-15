@@ -60,7 +60,9 @@ void del_first_entry(void)
 {
 	struct list_head *del = &head;
 	del = del->next;
+	struct mystruct *dataptr = container_of(del, struct mystruct, mylist);
 	__list_del_entry(del);
+	free(dataptr);
 }
 
 void del_last_entry(void)
@@ -73,6 +75,7 @@ void del_last_entry(void)
 	}
 	last_ptr = &last->mylist;
 	__list_del_entry(last_ptr);
+	free(last_ptr);
 }
 
 void avg_first_n_num(int n)
@@ -93,28 +96,7 @@ void avg_first_n_num(int n)
 int main(void)
 {
 	srand ( time(NULL) );
-	del_first_entry();
-	print1();
 	printf("Adding three random numbers\n");
 	add_tail();
-	add_tail();
-	add_tail();
-	printf("Printing using two different methods\n");
-	print1();
-	print2();
-	puts("");
-	printf("Deleted first entry\n");
 	del_first_entry();
-	print2();
-	printf("Added entry to tail\n");
-	add_tail();
-	print2();
-	printf("Adding entry to head\n");
-	add_head();
-	print2();
-	printf("Deleted last entry\n");
-	del_last_entry();
-	print2();
-	printf("Averaging first n numbers\n");
-	avg_first_n_num(2);
 }
